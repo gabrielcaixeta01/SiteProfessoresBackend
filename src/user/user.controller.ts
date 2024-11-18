@@ -19,6 +19,10 @@ export class UserController {
 
   @Post()
   async create(@Body(ValidationPipe) userData: CreateUserDto) {
+    // Verifica se profilepic é uma string e converte para Buffer
+    if (typeof userData.profilepic === 'string') {
+      userData.profilepic = Buffer.from(userData.profilepic, 'base64');
+    }
     return await this.userService.create(userData);
   }
 
@@ -42,6 +46,10 @@ export class UserController {
     @Param('id', ParseIntPipe) id: number,
     @Body(ValidationPipe) data: UpdateUserDto,
   ) {
+    // Verifica se profilepic é uma string e converte para Buffer
+    if (typeof data.profilepic === 'string') {
+      data.profilepic = Buffer.from(data.profilepic, 'base64');
+    }
     return await this.userService.updateUser(id, data);
   }
 }
