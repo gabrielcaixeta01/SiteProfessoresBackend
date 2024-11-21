@@ -13,7 +13,8 @@ export class CreateCommentDto {
     @IsDate()
     @IsOptional()
     date: Date;
-  
+    
+    @IsOptional()
     @IsBoolean()
-    isEdited: boolean;
+    isEdited?: boolean;
 }
