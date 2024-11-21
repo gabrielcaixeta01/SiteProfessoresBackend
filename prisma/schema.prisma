@@ -18,6 +18,7 @@ model User {
   profilepic Bytes?
 }
 
+
 model Comment {
   id Int @id @default(autoincrement())
   text String
@@ -30,3 +31,4 @@ model Comment {
 
   //review Review @relation(fields: [avaliacaoId], references: [id]) 
 }
+
