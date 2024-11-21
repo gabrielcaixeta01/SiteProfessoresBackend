@@ -8,7 +8,7 @@ export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(data: CreateUserDto) {
-    const user = await this.prisma.user.create({
+    return await this.prisma.user.create({
       data: {
         email: data.email,
         name: data.name,
@@ -18,8 +18,6 @@ export class UserService {
         profilepic: data.profilepic || null,
       },
     });
-
-    return user;
   }
 
   async findAll() {
@@ -28,22 +26,17 @@ export class UserService {
 
   async findUser(id: number) {
     return await this.prisma.user.findUnique({
-      where: {
-        id: id,
-      },
+      where: { id },
     });
   }
 
   async deleteUser(id: number) {
     return await this.prisma.user.delete({
-      where: {
-        id: id,
-      },
+      where: { id },
     });
   }
 
   async updateUser(id: number, data: UpdateUserDto) {
-    // Converta `profilepic` de string para Buffer, se necessário
     const updateData = {
       ...data,
       profilepic:
@@ -53,9 +46,7 @@ export class UserService {
     };
 
     return await this.prisma.user.update({
-      where: {
-        id: id,
-      },
+      where: { id },
       data: updateData,
     });
   }

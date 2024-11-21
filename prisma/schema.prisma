@@ -29,6 +29,5 @@ model Comment {
 
   user User @relation(fields: [userId], references: [id])
 
-  //review Review @relation(fields: [avaliacaoId], references: [id]) 
 }
 
