@@ -14,5 +14,19 @@ model User {
   password   String
   department String
   program    String
+  comments   Comment[]
   profilepic Bytes?
+}
+
+model Comment {
+  id Int @id @default(autoincrement())
+  text String
+  userId Int
+  reviewId Int
+  date DateTime @default(now())
+  isEdited Boolean
+
+  user User @relation(fields: [userId], references: [id])
+
+  //review Review @relation(fields: [avaliacaoId], references: [id]) 
 }
