@@ -16,6 +16,8 @@ model User {
   program    String
   comments   Comment[]
   profilepic Bytes?
+
+  Avaliacao Avaliacao[]
 }
 
 
@@ -28,6 +30,17 @@ model Comment {
   isEdited Boolean
 
   user User @relation(fields: [userId], references: [id])
+
+}
+
+model Avaliacao {
+    id Int @id @default(autoincrement())
+    text String
+    userId2 Int
+    nota Int
+    date DateTime @default(now())
+    isEdited Boolean
+    user User @relation(fields: [userId2], references: [id])
 
 }
 
