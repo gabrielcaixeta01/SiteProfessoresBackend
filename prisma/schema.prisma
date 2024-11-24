@@ -44,3 +44,19 @@ model Avaliacao {
 
 }
 
+model Courses {
+  id            Int    @id @default(autoincrement())
+  name          String @unique
+  idProfessors  String?
+  dateCreated   DateTime? @default(now())
+  dateUpdated   DateTime? @default(now())
+}
+
+model Professors{
+  id          Int @id @default(autoincrement())
+  name        String
+  department String
+  idCourses   String?
+  dateCreated DateTime? @default(now())
+  dateUpdated DateTime? @default(now()) 
+}
