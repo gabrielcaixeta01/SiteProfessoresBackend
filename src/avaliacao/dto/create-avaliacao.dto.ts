@@ -24,4 +24,10 @@ export class CreateAvaliacaoDto{
     @IsOptional()
     @IsBoolean()
     isEdited: boolean;
+
+    @IsNumber()
+    professorId: number;
+
+    @IsNumber()
+    courseId:number;
 }

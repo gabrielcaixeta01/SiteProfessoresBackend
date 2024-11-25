@@ -37,10 +37,14 @@ model Avaliacao {
     id Int @id @default(autoincrement())
     text String
     userId2 Int
+    courseId Int 
+    professorId Int
     nota Int
     date DateTime @default(now())
-    isEdited Boolean
+    isEdited Boolean?
     user User @relation(fields: [userId2], references: [id])
+    professor Professors @relation(fields: [professorId], references: [id])
+    course Courses @relation(fields: [courseId], references: [id])
 
 }
 
@@ -50,6 +54,7 @@ model Courses {
   idProfessors  String?
   dateCreated   DateTime? @default(now())
   dateUpdated   DateTime? @default(now())
+  avaliacoes Avaliacao[]
 }
 
 model Professors{
@@ -59,4 +64,5 @@ model Professors{
   idCourses   String?
   dateCreated DateTime? @default(now())
   dateUpdated DateTime? @default(now()) 
+  avaliacoes Avaliacao []
 }
