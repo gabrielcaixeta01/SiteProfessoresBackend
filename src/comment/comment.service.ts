@@ -11,7 +11,6 @@ export class CommentService {
     const comment = this.prisma.comment.create({
       data: {
         ...data,
-        isEdited: false,
       },
     });
     return comment;
@@ -23,7 +22,7 @@ export class CommentService {
 
   async findComment(id: number) {
     return await this.prisma.comment.findUnique({
-      where: {
+      where: { 
         id: id,
       },
     });
@@ -44,7 +43,6 @@ export class CommentService {
       },
       data: {
         ...data,
-        isEdited: true,
       },
     });
   }

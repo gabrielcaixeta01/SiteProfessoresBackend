@@ -8,8 +8,8 @@ datasource db {
 }
 
 model User {
-  id         Int     @id @default(autoincrement())
-  email      String  @unique
+  id         Int       @id @default(autoincrement())
+  email      String    @unique
   name       String
   password   String
   department String
@@ -20,49 +20,42 @@ model User {
   Avaliacao Avaliacao[]
 }
 
-
 model Comment {
-  id Int @id @default(autoincrement())
-  text String
-  userId Int
-  reviewId Int
-  date DateTime @default(now())
-  isEdited Boolean
+  id          Int      @id @default(autoincrement())
+  text        String
+  userId      Int
+  avaliacaoId Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  user User @relation(fields: [userId], references: [id])
-
+  user      User      @relation(fields: [userId], references: [id])
+  avaliacao Avaliacao @relation(fields: [avaliacaoId], references: [id])
 }
 
 model Avaliacao {
-    id Int @id @default(autoincrement())
-    text String
-    userId2 Int
-    courseId Int 
-    professorId Int
-    nota Int
-    date DateTime @default(now())
-    isEdited Boolean?
-    user User @relation(fields: [userId2], references: [id])
-    professor Professors @relation(fields: [professorId], references: [id])
-    course Courses @relation(fields: [courseId], references: [id])
-
+  id       Int       @id @default(autoincrement())
+  text     String
+  userId2  Int
+  nota     Int
+  date     DateTime  @default(now())
+  isEdited Boolean
+  comments Comment[]
+  user     User      @relation(fields: [userId2], references: [id])
 }
 
 model Courses {
-  id            Int    @id @default(autoincrement())
-  name          String @unique
-  idProfessors  String?
-  dateCreated   DateTime? @default(now())
-  dateUpdated   DateTime? @default(now())
-  avaliacoes Avaliacao[]
+  id           Int       @id @default(autoincrement())
+  name         String    @unique
+  idProfessors String?
+  dateCreated  DateTime? @default(now())
+  dateUpdated  DateTime? @default(now())
 }
 
-model Professors{
-  id          Int @id @default(autoincrement())
+model Professors {
+  id          Int       @id @default(autoincrement())
   name        String
-  department String
+  department  String
   idCourses   String?
   dateCreated DateTime? @default(now())
-  dateUpdated DateTime? @default(now()) 
-  avaliacoes Avaliacao []
+  dateUpdated DateTime? @default(now())
 }

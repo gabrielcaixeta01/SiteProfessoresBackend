@@ -1,5 +1,4 @@
 import {
-  IsBoolean,
   IsDate,
   IsNumber,
   IsOptional,
@@ -15,14 +14,6 @@ export class CreateCommentDto {
   userId: number;
 
   @IsNumber()
-  reviewId: number;
+  avaliacaoId: number;
 
-  @IsOptional()
-  @Transform(({ value }) => (value ? new Date(value) : undefined))
-  @IsDate()
-  date?: Date;
-
-  @IsOptional()
-  @IsBoolean()
-  isEdited?: boolean;
 }
