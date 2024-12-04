@@ -22,7 +22,7 @@ export class CommentService {
 
   async findComment(id: number) {
     return await this.prisma.comment.findUnique({
-      where: { 
+      where: {
         id: id,
       },
     });

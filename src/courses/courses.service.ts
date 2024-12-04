@@ -5,45 +5,43 @@ import { UpdateCourseDto } from './dto/update-course-dto';
 
 @Injectable()
 export class CoursesService {
-    constructor (
-        private readonly prisma: PrismaService
-    ){}
+  constructor(private readonly prisma: PrismaService) {}
 
-    async create(data: CreateCourseDto){
-        const course = await this.prisma.courses.create({
-        data: {
-            ...data
-        },
+  async create(data: CreateCourseDto) {
+    const course = await this.prisma.courses.create({
+      data: {
+        ...data,
+      },
     });
     return course;
-    }
+  }
 
-    async findAll (){
-        return this.prisma.courses.findMany();
-    }
+  async findAll() {
+    return this.prisma.courses.findMany();
+  }
 
-    async findCourse(id:number){
-        return await this.prisma.courses.findUnique({
-            where: {
-                id:id,
-            },
-        })
-    }
+  async findCourse(id: number) {
+    return await this.prisma.courses.findUnique({
+      where: {
+        id: id,
+      },
+    });
+  }
 
-    async deleteCourse (id:number){
-        return await this.prisma.courses.delete({
-            where:{
-                id:id,
-            },
-        })
-    }
+  async deleteCourse(id: number) {
+    return await this.prisma.courses.delete({
+      where: {
+        id: id,
+      },
+    });
+  }
 
-    async updateCourse (id:number, data:UpdateCourseDto){
-        return await this.prisma.courses.update({
-            where:{
-                id:id,
-            },
-            data:data
-        })
-    }
+  async updateCourse(id: number, data: UpdateCourseDto) {
+    return await this.prisma.courses.update({
+      where: {
+        id: id,
+      },
+      data: data,
+    });
+  }
 }

@@ -1,33 +1,34 @@
 import {
-    IsBoolean,
-    IsDate,
-    IsNumber,
-    IsOptional,
-    IsString,
-  } from 'class-validator';
+  IsBoolean,
+  IsDate,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { Transform } from 'class-transformer';
-export class CreateAvaliacaoDto{
-    @IsString()
-    text: string;
 
-    @IsNumber()
-    userId2: number;
+export class CreateAvaliacaoDto {
+  @IsString()
+  text: string;
 
-    @IsNumber()
-    nota: number;
+  @IsNumber()
+  userId2: number;
 
-    @IsOptional()
-    @Transform(({ value }) => (value ? new Date(value) : undefined))
-    @IsDate()
-    date?: Date;
+  @IsNumber()
+  nota: number;
 
-    @IsOptional()
-    @IsBoolean()
-    isEdited: boolean;
+  @IsOptional()
+  @Transform(({ value }) => (value ? new Date(value) : undefined))
+  @IsDate()
+  date?: Date;
 
-    @IsNumber()
-    professorId: number;
+  @IsOptional()
+  @IsBoolean()
+  isEdited: boolean;
 
-    @IsNumber()
-    courseId:number;
+  @IsNumber()
+  professorId: number;
+
+  @IsNumber()
+  courseId: number;
 }
