@@ -1,17 +1,21 @@
-import { IsString, IsEmail, IsOptional, IsBase64 } from 'class-validator';
+import { IsString, IsOptional, IsBase64 } from 'class-validator';
 
 export class UpdateUserDto {
   @IsString()
   @IsOptional()
-  username?: string;
-
-  @IsEmail()
-  @IsOptional()
-  email?: string;
+  name?: string;
 
   @IsString()
   @IsOptional()
-  name?: string;
+  password?: string;
+
+  @IsString()
+  @IsOptional()
+  department?: string;
+
+  @IsString()
+  @IsOptional()
+  course?: string;
 
   @IsOptional()
   @IsBase64()
