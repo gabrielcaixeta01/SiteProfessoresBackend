@@ -7,6 +7,9 @@ import {
 } from 'class-validator';
 
 export class CreateUserDto {
+  @IsOptional()
+  id?: number;
+
   @IsNotEmpty({ message: 'Nome is required' })
   @IsString({ message: 'Nome must be a string' })
   name: string;
