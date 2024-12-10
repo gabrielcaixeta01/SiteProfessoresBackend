@@ -6,6 +6,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true, 
     "target": "ES2021",
     "sourceMap": true,
     "outDir": "./dist",
@@ -15,7 +16,10 @@
     "strictNullChecks": false,
     "noImplicitAny": false,
     "strictBindCallApply": false,
-    "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
-  }
+    "forceConsistentCasingInFileNames": true, 
+    "noFallthroughCasesInSwitch": true, 
+    "moduleResolution": "node" 
+  },
+  "include": ["src/**/*"], 
+  "exclude": ["node_modules", "dist"]
 }
