@@ -47,31 +47,21 @@ model Avaliacao {
 }
 
 model Courses {
-  id           Int       @id @default(autoincrement())
-  name         String    @unique
-  professors   Professors[]
-  dateCreated  DateTime  @default(now())
-  dateUpdated  DateTime  @updatedAt
-  courseProfessor CourseProfessor[]
-  users           User[]
-  avaliacoes      Avaliacao[]
+  id           Int           @id @default(autoincrement())
+  name         String        @unique
+  professors   Professors[]  @relation("ProfessorCourses") 
+  dateCreated  DateTime      @default(now())
+  dateUpdated  DateTime      @updatedAt
+  users        User[]
+  avaliacoes   Avaliacao[]
 }
 
 model Professors {
-  id           Int       @id @default(autoincrement())
+  id           Int           @id @default(autoincrement())
   name         String
   department   String
-  courses      Courses[]
+  courses      Courses[]      @relation("ProfessorCourses") 
   avaliacao    Avaliacao[]
-  courseProfessor CourseProfessor[]
-  dateCreated  DateTime  @default(now())
-  dateUpdated  DateTime  @updatedAt
-}
-
-model CourseProfessor {
-  courseId     Int
-  professorId  Int
-  course       Courses     @relation(fields: [courseId], references: [id])
-  professor    Professors  @relation(fields: [professorId], references: [id])
-  @@id([courseId, professorId])
+  dateCreated  DateTime      @default(now())
+  dateUpdated  DateTime      @updatedAt
 }
