@@ -15,7 +15,7 @@ export class UserService {
         password: data.password,
         department: data.department,
         course: data.course,
-        profilepic: data.profilepic || null,
+        profilepic: data.profilepic ? data.profilepic.toString('base64') : null,
       },
     });
   }
@@ -41,8 +41,8 @@ export class UserService {
       ...data,
       profilepic:
         typeof data.profilepic === 'string'
-          ? Buffer.from(data.profilepic, 'base64')
-          : data.profilepic,
+          ? data.profilepic.toString()
+          : data.profilepic?.toString('base64'),
     };
 
     return await this.prisma.user.update({
