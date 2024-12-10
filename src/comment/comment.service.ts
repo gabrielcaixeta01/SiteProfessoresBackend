@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateCommentDto } from './dto/update-comment.dto';
@@ -8,9 +8,28 @@ export class CommentService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(data: CreateCommentDto) {
-    const comment = this.prisma.comment.create({
+    // Valida se o usuário existe
+    const userExists = await this.prisma.user.findUnique({
+      where: { id: data.userId },
+    });
+    if (!userExists) {
+      throw new NotFoundException('Usuário não encontrado.');
+    }
+
+    // Valida se a avaliação existe
+    const avaliacaoExists = await this.prisma.avaliacao.findUnique({
+      where: { id: data.avaliacaoId },
+    });
+    if (!avaliacaoExists) {
+      throw new NotFoundException('Avaliação não encontrada.');
+    }
+
+    // Cria o comentário
+    const comment = await this.prisma.comment.create({
       data: {
-        ...data,
+        text: data.text,
+        userId: data.userId,
+        avaliacaoId: data.avaliacaoId,
       },
     });
     return comment;
@@ -21,14 +40,25 @@ export class CommentService {
   }
 
   async findComment(id: number) {
-    return await this.prisma.comment.findUnique({
+    const comment = await this.prisma.comment.findUnique({
       where: {
         id: id,
       },
     });
+    if (!comment) {
+      throw new NotFoundException('Comentário não encontrado.');
+    }
+    return comment;
   }
 
   async deleteComment(id: number) {
+    const comment = await this.prisma.comment.findUnique({
+      where: { id },
+    });
+    if (!comment) {
+      throw new NotFoundException('Comentário não encontrado.');
+    }
+
     return await this.prisma.comment.delete({
       where: {
         id: id,
@@ -37,6 +67,13 @@ export class CommentService {
   }
 
   async updateComment(id: number, data: UpdateCommentDto) {
+    const comment = await this.prisma.comment.findUnique({
+      where: { id },
+    });
+    if (!comment) {
+      throw new NotFoundException('Comentário não encontrado.');
+    }
+
     return await this.prisma.comment.update({
       where: {
         id: id,

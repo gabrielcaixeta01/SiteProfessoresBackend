@@ -8,6 +8,7 @@ import {
   ParseIntPipe,
   Delete,
   Patch,
+  NotFoundException,
 } from '@nestjs/common';
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
@@ -29,7 +30,11 @@ export class CommentController {
 
   @Get(':id')
   async findComment(@Param('id', ParseIntPipe) id: number) {
-    return await this.commentService.findComment(id);
+    const comment = await this.commentService.findComment(id);
+    if (!comment) {
+      throw new NotFoundException('Comentário não encontrado');
+    }
+    return comment;
   }
 
   @Delete(':id')
