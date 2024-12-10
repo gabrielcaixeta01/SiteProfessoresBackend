@@ -2,6 +2,7 @@ import {
   IsEmail,
   IsNotEmpty,
   IsOptional,
+  IsNumber,
   IsString,
   IsStrongPassword,
 } from 'class-validator';
@@ -27,8 +28,8 @@ export class CreateUserDto {
   department: string;
 
   @IsNotEmpty({ message: 'Curso is required' })
-  @IsString({ message: 'Curso must be a string' })
-  course: string;
+  @IsNumber({}, { message: 'Curso must be a valid course ID' })
+  courseId: number;
 
   @IsOptional()
   profilepic?: Buffer;

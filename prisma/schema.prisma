@@ -8,12 +8,13 @@ datasource db {
 }
 
 model User {
-  id          Int      @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   name        String
-  email       String   @unique
+  email       String    @unique
   password    String
   department  String
-  course      String?
+  course      Courses?  @relation(fields: [courseId], references: [id])
+  courseId    Int?
   profilepic  String?
   Avaliacao   Avaliacao[]
   comments    Comment[]
@@ -31,29 +32,46 @@ model Comment {
 }
 
 model Avaliacao {
-  id       Int       @id @default(autoincrement())
-  text     String
-  userId2  Int
-  nota     Int
-  date     DateTime  @default(now())
-  isEdited Boolean
-  user     User      @relation(fields: [userId2], references: [id])
-  comments Comment[]
+  id          Int         @id @default(autoincrement())
+  text        String
+  userId2     Int
+  nota        Int
+  date        DateTime     @default(now())
+  isEdited    Boolean
+  user        User         @relation(fields: [userId2], references: [id])
+  professor   Professors   @relation(fields: [professorId], references: [id])
+  professorId Int
+  course      Courses      @relation(fields: [courseId], references: [id])
+  courseId    Int
+  comments    Comment[]
 }
 
 model Courses {
   id           Int       @id @default(autoincrement())
   name         String    @unique
-  idProfessors String?
-  dateCreated  DateTime? @default(now())
-  dateUpdated  DateTime? @default(now())
+  professors   Professors[]
+  dateCreated  DateTime  @default(now())
+  dateUpdated  DateTime  @updatedAt
+  courseProfessor CourseProfessor[]
+  users           User[]
+  avaliacoes      Avaliacao[]
 }
 
 model Professors {
-  id          Int       @id @default(autoincrement())
-  name        String
-  department  String
-  idCourses   String?
-  dateCreated DateTime? @default(now())
-  dateUpdated DateTime? @default(now())
+  id           Int       @id @default(autoincrement())
+  name         String
+  department   String
+  courses      Courses[]
+  avaliacao    Avaliacao[]
+  courseProfessor CourseProfessor[]
+  dateCreated  DateTime  @default(now())
+  dateUpdated  DateTime  @updatedAt
+}
+
+model CourseProfessor {
+  courseId     Int
+  professorId  Int
+  course       Courses     @relation(fields: [courseId], references: [id])
+  professor    Professors  @relation(fields: [professorId], references: [id])
+  @@id([courseId, professorId])
 }
