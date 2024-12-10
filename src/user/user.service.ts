@@ -14,7 +14,7 @@ export class UserService {
         name: data.name,
         password: data.password,
         department: data.department,
-        program: data.program,
+        course: data.course,
         profilepic: data.profilepic || null,
       },
     });

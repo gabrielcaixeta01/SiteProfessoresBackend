@@ -28,7 +28,7 @@ export class CreateUserDto {
 
   @IsNotEmpty({ message: 'Curso is required' })
   @IsString({ message: 'Curso must be a string' })
-  program: string;
+  course: string;
 
   @IsOptional()
   profilepic?: Buffer;
