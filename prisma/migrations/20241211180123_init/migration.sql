@@ -4,13 +4,9 @@ CREATE TABLE "User" (
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "departmentId" INTEGER NOT NULL,
     "programId" INTEGER,
-    "courseId" INTEGER NOT NULL,
     "profilepic" TEXT,
-    CONSTRAINT "User_departmentId_fkey" FOREIGN KEY ("departmentId") REFERENCES "Department" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT "User_programId_fkey" FOREIGN KEY ("programId") REFERENCES "Programs" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
-    CONSTRAINT "User_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "Courses" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "User_programId_fkey" FOREIGN KEY ("programId") REFERENCES "Programs" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -60,9 +56,10 @@ CREATE TABLE "Courses" (
 CREATE TABLE "Professor" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "name" TEXT NOT NULL,
-    "department" TEXT NOT NULL,
+    "departmentId" INTEGER NOT NULL,
     "dateCreated" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "dateUpdated" DATETIME NOT NULL
+    "dateUpdated" DATETIME NOT NULL,
+    CONSTRAINT "Professor_departmentId_fkey" FOREIGN KEY ("departmentId") REFERENCES "Department" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateTable

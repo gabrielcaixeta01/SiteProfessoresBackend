@@ -12,8 +12,6 @@ model User {
   name        String
   email       String      @unique
   password    String
-  department  Department  @relation(fields: [departmentId], references: [id])
-  departmentId Int
   program     Programs?    @relation(fields: [programId], references: [id])
   programId   Int?
   profilepic  String?
@@ -67,8 +65,9 @@ model Courses {
 model Professor {
   id           Int           @id @default(autoincrement())
   name         String
-  department   String
-  courses      Courses[]      @relation("ProfessorCourses")
+  department   Department   @relation(fields: [departmentId], references: [id])
+  departmentId Int
+  courses      Courses[]     @relation("ProfessorCourses")
   avaliacoes   Avaliacao[]
   dateCreated  DateTime      @default(now())
   dateUpdated  DateTime      @updatedAt
@@ -77,7 +76,7 @@ model Professor {
 model Department {
   id           Int       @id @default(autoincrement())
   name         String    @unique
-  users        User[]
+  professors   Professor[]
   dateCreated  DateTime  @default(now())
   dateUpdated  DateTime  @updatedAt
 }

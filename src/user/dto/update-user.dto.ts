@@ -9,10 +9,6 @@ export class UpdateUserDto {
   @IsOptional()
   password?: string;
 
-  @IsString()
-  @IsOptional()
-  department?: string;
-
   @IsInt()
   @IsOptional()
   programId?: number;

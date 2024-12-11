@@ -13,7 +13,6 @@ export class UserService {
         email: data.email,
         name: data.name,
         password: data.password,
-        department: { connect: { id: data.departmentId } },
         program: { connect: { id: data.programId } },
         profilepic: data.profilepic ? data.profilepic.toString('base64') : null,
       },
@@ -51,11 +50,11 @@ export class UserService {
   async updateUser(id: number, data: UpdateUserDto) {
     const updateData: any = {
       ...data,
-      programId: data.programId ? Number(data.programId) : undefined, // Associando ao `courseId`
+      programId: data.programId ? Number(data.programId) : undefined,
       profilepic: data.profilepic
         ? typeof data.profilepic === 'string'
           ? data.profilepic
-          : data.profilepic.toString('base64') // Convertendo buffer para base64
+          : data.profilepic.toString('base64')
         : undefined,
     };
 

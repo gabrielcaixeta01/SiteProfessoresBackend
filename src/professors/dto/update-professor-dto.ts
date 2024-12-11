@@ -1,18 +1,25 @@
-import { IsNotEmpty, IsString, IsOptional, IsDate } from 'class-validator';
-
+import {
+  IsNotEmpty,
+  IsOptional,
+  IsDate,
+  IsInt,
+  IsArray,
+} from 'class-validator';
 import { Transform } from 'class-transformer';
 
 export class UpdateProfessorDto {
   @IsOptional()
   @IsNotEmpty({ message: 'O professor deve pertencer a algum departamento' })
-  @IsString({ message: 'Departamento inválido' })
-  department: string;
+  @IsInt({ message: 'Departamento inválido' })
+  departmentId?: number;
 
   @IsOptional()
-  idCourses: string;
+  @IsArray()
+  @IsInt({ each: true, message: 'Os IDs dos cursos devem ser números' })
+  coursesIds?: number[];
 
   @IsOptional()
   @Transform(({ value }) => (value ? new Date(value) : undefined))
-  @IsDate()
-  dateUptaded?: Date;
+  @IsDate({ message: 'Data de atualização inválida' })
+  dateUpdated?: Date;
 }

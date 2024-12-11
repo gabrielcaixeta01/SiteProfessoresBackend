@@ -32,9 +32,6 @@ export class CreateUserDto {
   })
   password: string;
 
-  @IsInt()
-  @IsNotEmpty()
-  departmentId: number;
   @IsOptional()
   @IsInt()
   programId?: number;
