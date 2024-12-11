@@ -30,6 +30,12 @@ export class UserService {
     });
   }
 
+  async findUserByEmail(email: string) {
+    return await this.prisma.user.findUnique({
+      where: { email },
+    });
+  }
+
   async deleteUser(id: number) {
     return await this.prisma.user.delete({
       where: { id },
