@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateProfessorDto } from './dto/create-professor-dto';
 import { UpdateProfessorDto } from './dto/update-professor-dto';
@@ -14,10 +14,10 @@ export class ProfessorsService {
     return await this.prisma.professor.create({
       data: {
         name,
-        department: { connect: { id: departmentId } }, // Conecta ao departamento
-        courses: {
-          connect: courseIds?.map((id) => ({ id })), // Conecta aos cursos
-        },
+        department: { connect: { id: departmentId } },
+        courses: courseIds?.length
+          ? { connect: courseIds.map((id) => ({ id })) }
+          : undefined,
       },
     });
   }
@@ -34,7 +34,7 @@ export class ProfessorsService {
 
   // Retorna um professor específico
   async findProfessor(id: number) {
-    return await this.prisma.professor.findUnique({
+    const professor = await this.prisma.professor.findUnique({
       where: {
         id,
       },
@@ -43,10 +43,22 @@ export class ProfessorsService {
         courses: true,
       },
     });
+
+    if (!professor) {
+      throw new NotFoundException(`Professor com ID ${id} não encontrado.`);
+    }
+
+    return professor;
   }
 
   // Exclui um professor
   async deleteProfessor(id: number) {
+    const professor = await this.prisma.professor.findUnique({ where: { id } });
+
+    if (!professor) {
+      throw new NotFoundException(`Professor com ID ${id} não encontrado.`);
+    }
+
     return await this.prisma.professor.delete({
       where: {
         id,
@@ -64,9 +76,9 @@ export class ProfessorsService {
       },
       data: {
         ...updateData,
-        courses: {
-          set: courseIds?.map((id) => ({ id })), // Atualiza os cursos associados
-        },
+        courses: courseIds?.length
+          ? { set: courseIds.map((id) => ({ id })) }
+          : undefined,
       },
     });
   }

@@ -7,6 +7,7 @@ import {
   Param,
   Body,
   ParseIntPipe,
+  BadRequestException,
 } from '@nestjs/common';
 import { ProgramsService } from './programs.service';
 import { CreateProgramDto } from './dto/create-program.dto';
@@ -17,7 +18,17 @@ export class ProgramsController {
   constructor(private readonly programsService: ProgramsService) {}
 
   @Post()
-  async create(@Body() createProgramDto: CreateProgramDto) {
+  async create(
+    @Body() createProgramDto: CreateProgramDto | CreateProgramDto[],
+  ) {
+    if (Array.isArray(createProgramDto)) {
+      if (createProgramDto.length === 0) {
+        throw new BadRequestException(
+          'A lista de programas não pode estar vazia.',
+        );
+      }
+      return this.programsService.createMany(createProgramDto);
+    }
     return this.programsService.create(createProgramDto);
   }
 

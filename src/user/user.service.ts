@@ -26,6 +26,16 @@ export class UserService {
   async findUserById(id: number) {
     const user = await this.prisma.user.findUnique({
       where: { id },
+      include: {
+        program: true,
+        avaliacoes: {
+          include: {
+            professor: true,
+            course: true,
+            comments: true,
+          },
+        },
+      },
     });
 
     if (!user) {

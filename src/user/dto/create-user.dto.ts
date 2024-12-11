@@ -10,15 +10,15 @@ import {
 import { Transform } from 'class-transformer';
 
 export class CreateUserDto {
-  @IsString()
-  @IsNotEmpty()
+  @IsString({ message: 'O nome deve ser uma string.' })
+  @IsNotEmpty({ message: 'O nome é obrigatório.' })
   name: string;
 
-  @IsEmail()
-  @IsNotEmpty()
+  @IsEmail({}, { message: 'O e-mail deve ser válido.' })
+  @IsNotEmpty({ message: 'O e-mail é obrigatório.' })
   email: string;
 
-  @IsString()
+  @IsString({ message: 'A senha deve ser uma string.' })
   @MinLength(8, { message: 'A senha deve ter pelo menos 8 caracteres.' })
   @Matches(/(?=.*[a-z])/, {
     message: 'A senha deve conter pelo menos uma letra minúscula.',
@@ -33,10 +33,12 @@ export class CreateUserDto {
   password: string;
 
   @IsOptional()
-  @IsInt()
+  @IsInt({ message: 'O ID do programa deve ser um número inteiro.' })
   programId?: number;
 
   @IsOptional()
-  @Transform(({ value }) => (value ? Buffer.from(value, 'base64') : null)) // Converte base64 para Buffer
+  @Transform(({ value }) =>
+    typeof value === 'string' ? Buffer.from(value, 'base64') : null,
+  )
   profilepic?: Buffer;
 }

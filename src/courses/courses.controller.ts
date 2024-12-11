@@ -18,8 +18,13 @@ export class CoursesController {
   constructor(private readonly coursesService: CoursesService) {}
 
   @Post()
-  async create(@Body(ValidationPipe) userData: CreateCourseDto) {
-    return await this.coursesService.create(userData);
+  async create(
+    @Body(ValidationPipe) coursesData: CreateCourseDto | CreateCourseDto[],
+  ) {
+    if (Array.isArray(coursesData)) {
+      return await this.coursesService.createMany(coursesData);
+    }
+    return await this.coursesService.create(coursesData);
   }
 
   @Get()

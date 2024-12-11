@@ -19,22 +19,22 @@ export class AvaliacaoController {
 
   @Post()
   async create(@Body(ValidationPipe) avaliacaoData: CreateAvaliacaoDto) {
-    return await this.avaliacaoService.create(avaliacaoData);
+    return this.avaliacaoService.create(avaliacaoData);
   }
 
   @Get()
   async findAll() {
-    return await this.avaliacaoService.findAll();
+    return this.avaliacaoService.findAll();
   }
 
   @Get(':id')
   async findAvaliacao(@Param('id', ParseIntPipe) id: number) {
-    return await this.avaliacaoService.findAvaliacao(id);
+    return this.avaliacaoService.findAvaliacao(id);
   }
 
   @Delete(':id')
   async deleteAvaliacao(@Param('id', ParseIntPipe) id: number) {
-    return await this.avaliacaoService.deleteAvaliacao(id);
+    return this.avaliacaoService.deleteAvaliacao(id);
   }
 
   @Patch(':id')
@@ -42,6 +42,6 @@ export class AvaliacaoController {
     @Param('id', ParseIntPipe) id: number,
     @Body(ValidationPipe) data: UpdateAvaliacaoDto,
   ) {
-    return await this.avaliacaoService.updateAvaliacao(id, data);
+    return this.avaliacaoService.updateAvaliacao(id, data);
   }
 }

@@ -21,6 +21,27 @@ export class DepartmentsService {
     });
   }
 
+  async createMany(departmentsData: CreateDepartmentDto[]) {
+    const existingDepartments = await this.prisma.department.findMany({
+      where: {
+        name: { in: departmentsData.map((department) => department.name) },
+      },
+    });
+
+    if (existingDepartments.length > 0) {
+      const existingNames = existingDepartments
+        .map((dep) => dep.name)
+        .join(', ');
+      throw new ConflictException(
+        `Os seguintes departamentos já existem: ${existingNames}`,
+      );
+    }
+
+    return await this.prisma.department.createMany({
+      data: departmentsData,
+    });
+  }
+
   async findAll() {
     return await this.prisma.department.findMany();
   }
@@ -32,12 +53,16 @@ export class DepartmentsService {
   }
 
   async update(id: number, updateDepartmentDto: UpdateDepartmentDto) {
-    const existingDepartment = await this.prisma.department.findUnique({
-      where: { name: updateDepartmentDto.name },
-    });
+    const { name } = updateDepartmentDto;
 
-    if (existingDepartment && existingDepartment.id !== id) {
-      throw new ConflictException('O nome do departamento já está em uso.');
+    if (name) {
+      const existingDepartment = await this.prisma.department.findUnique({
+        where: { name },
+      });
+
+      if (existingDepartment && existingDepartment.id !== id) {
+        throw new ConflictException('O nome do departamento já está em uso.');
+      }
     }
 
     return await this.prisma.department.update({

@@ -17,31 +17,36 @@ import {
 export class ProfessorsController {
   constructor(private readonly professorsService: ProfessorsService) {}
 
+  // Cria um professor
   @Post()
-  async create(@Body(ValidationPipe) userData: CreateProfessorDto) {
-    return await this.professorsService.create(userData);
+  async create(@Body(ValidationPipe) professorData: CreateProfessorDto) {
+    return this.professorsService.create(professorData);
   }
 
+  // Retorna todos os professores
   @Get()
   async findAll() {
-    return await this.professorsService.findAll();
+    return this.professorsService.findAll();
   }
 
+  // Retorna um professor específico pelo ID
   @Get(':id')
-  async findCourse(@Param('id', ParseIntPipe) id: number) {
-    return await this.professorsService.findProfessor(id);
+  async findProfessor(@Param('id', ParseIntPipe) id: number) {
+    return this.professorsService.findProfessor(id);
   }
 
+  // Exclui um professor pelo ID
   @Delete(':id')
-  async deleteCourse(@Param('id', ParseIntPipe) id: number) {
-    return await this.professorsService.deleteProfessor(id);
+  async deleteProfessor(@Param('id', ParseIntPipe) id: number) {
+    return this.professorsService.deleteProfessor(id);
   }
 
+  // Atualiza as informações de um professor pelo ID
   @Patch(':id')
-  async updateCourse(
+  async updateProfessor(
     @Param('id', ParseIntPipe) id: number,
     @Body(ValidationPipe) data: UpdateProfessorDto,
   ) {
-    return await this.professorsService.updateProfessor(id, data);
+    return this.professorsService.updateProfessor(id, data);
   }
 }

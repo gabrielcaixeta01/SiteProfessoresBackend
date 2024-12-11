@@ -6,6 +6,8 @@ CREATE TABLE "User" (
     "password" TEXT NOT NULL,
     "programId" INTEGER,
     "profilepic" TEXT,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
     CONSTRAINT "User_programId_fkey" FOREIGN KEY ("programId") REFERENCES "Programs" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
@@ -28,9 +30,11 @@ CREATE TABLE "Avaliacao" (
     "userId" INTEGER NOT NULL,
     "nota" INTEGER NOT NULL,
     "date" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "isEdited" BOOLEAN NOT NULL,
+    "isEdited" BOOLEAN NOT NULL DEFAULT false,
     "professorId" INTEGER NOT NULL,
     "courseId" INTEGER NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
     CONSTRAINT "Avaliacao_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "Avaliacao_professorId_fkey" FOREIGN KEY ("professorId") REFERENCES "Professor" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "Avaliacao_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "Courses" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
@@ -40,16 +44,16 @@ CREATE TABLE "Avaliacao" (
 CREATE TABLE "Programs" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "name" TEXT NOT NULL,
-    "dateCreated" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "dateUpdated" DATETIME NOT NULL
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL
 );
 
 -- CreateTable
 CREATE TABLE "Courses" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "name" TEXT NOT NULL,
-    "dateCreated" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "dateUpdated" DATETIME NOT NULL
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL
 );
 
 -- CreateTable
@@ -57,8 +61,8 @@ CREATE TABLE "Professor" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "name" TEXT NOT NULL,
     "departmentId" INTEGER NOT NULL,
-    "dateCreated" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "dateUpdated" DATETIME NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
     CONSTRAINT "Professor_departmentId_fkey" FOREIGN KEY ("departmentId") REFERENCES "Department" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
@@ -66,8 +70,8 @@ CREATE TABLE "Professor" (
 CREATE TABLE "Department" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "name" TEXT NOT NULL,
-    "dateCreated" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "dateUpdated" DATETIME NOT NULL
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL
 );
 
 -- CreateTable

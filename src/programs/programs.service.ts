@@ -14,8 +14,26 @@ export class ProgramsService {
       });
     } catch (error) {
       if (error.code === 'P2002') {
-        // Código de erro Prisma para unicidade
         throw new ConflictException('Programa com este nome já existe.');
+      }
+      throw error;
+    }
+  }
+
+  async createMany(createProgramDtos: CreateProgramDto[]) {
+    try {
+      return await this.prisma.$transaction(
+        createProgramDtos.map((program) =>
+          this.prisma.programs.create({
+            data: program,
+          }),
+        ),
+      );
+    } catch (error) {
+      if (error.code === 'P2002') {
+        throw new ConflictException(
+          'Um ou mais programas com o mesmo nome já existem.',
+        );
       }
       throw error;
     }
