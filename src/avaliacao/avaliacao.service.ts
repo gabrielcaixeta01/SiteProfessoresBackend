@@ -10,12 +10,12 @@ export class AvaliacaoService {
   async create(data: CreateAvaliacaoDto) {
     // Verifica se o usuário existe
     const user = await this.prisma.user.findUnique({
-      where: { id: data.userId2 },
+      where: { id: data.userId },
     });
     if (!user) throw new NotFoundException('Usuário não encontrado');
 
     // Verifica se o professor existe
-    const professor = await this.prisma.professors.findUnique({
+    const professor = await this.prisma.professor.findUnique({
       where: { id: data.professorId },
     });
     if (!professor) throw new NotFoundException('Professor não encontrado');
@@ -30,7 +30,7 @@ export class AvaliacaoService {
     return await this.prisma.avaliacao.create({
       data: {
         text: data.text,
-        userId2: data.userId2,
+        userId: data.userId,
         nota: data.nota,
         date: data.date,
         isEdited: data.isEdited || false,

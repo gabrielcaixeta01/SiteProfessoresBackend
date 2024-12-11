@@ -15,7 +15,7 @@ export class UpdateUserDto {
 
   @IsInt()
   @IsOptional()
-  courseId?: number;
+  programId?: number;
 
   @IsOptional()
   @IsString()

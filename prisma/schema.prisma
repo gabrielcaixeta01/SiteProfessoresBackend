@@ -8,15 +8,16 @@ datasource db {
 }
 
 model User {
-  id          Int       @id @default(autoincrement())
+  id          Int         @id @default(autoincrement())
   name        String
-  email       String    @unique
+  email       String      @unique
   password    String
-  department  String
-  course      Courses?  @relation(fields: [courseId], references: [id])
-  courseId    Int?
+  department  Department  @relation(fields: [departmentId], references: [id])
+  departmentId Int
+  program     Programs?    @relation(fields: [programId], references: [id])
+  programId   Int?
   profilepic  String?
-  Avaliacao   Avaliacao[]
+  avaliacoes  Avaliacao[]
   comments    Comment[]
 }
 
@@ -32,36 +33,51 @@ model Comment {
 }
 
 model Avaliacao {
-  id          Int         @id @default(autoincrement())
+  id          Int           @id @default(autoincrement())
   text        String
-  userId2     Int
+  userId      Int
   nota        Int
-  date        DateTime     @default(now())
+  date        DateTime      @default(now())
   isEdited    Boolean
-  user        User         @relation(fields: [userId2], references: [id])
-  professor   Professors   @relation(fields: [professorId], references: [id])
+  user        User          @relation(fields: [userId], references: [id])
+  professor   Professor     @relation(fields: [professorId], references: [id])
   professorId Int
-  course      Courses      @relation(fields: [courseId], references: [id])
+  course      Courses       @relation(fields: [courseId], references: [id])
   courseId    Int
   comments    Comment[]
+}
+
+model Programs {
+  id           Int         @id @default(autoincrement())
+  name         String      @unique
+  users        User[]
+  dateCreated  DateTime    @default(now())
+  dateUpdated  DateTime    @updatedAt
 }
 
 model Courses {
   id           Int           @id @default(autoincrement())
   name         String        @unique
-  professors   Professors[]  @relation("ProfessorCourses") 
+  professors   Professor[]   @relation("ProfessorCourses")
   dateCreated  DateTime      @default(now())
   dateUpdated  DateTime      @updatedAt
-  users        User[]
   avaliacoes   Avaliacao[]
 }
 
-model Professors {
+model Professor {
   id           Int           @id @default(autoincrement())
   name         String
   department   String
-  courses      Courses[]      @relation("ProfessorCourses") 
-  avaliacao    Avaliacao[]
+  courses      Courses[]      @relation("ProfessorCourses")
+  avaliacoes   Avaliacao[]
   dateCreated  DateTime      @default(now())
   dateUpdated  DateTime      @updatedAt
+}
+
+model Department {
+  id           Int       @id @default(autoincrement())
+  name         String    @unique
+  users        User[]
+  dateCreated  DateTime  @default(now())
+  dateUpdated  DateTime  @updatedAt
 }

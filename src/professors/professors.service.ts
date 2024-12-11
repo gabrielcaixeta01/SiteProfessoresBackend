@@ -8,7 +8,7 @@ export class ProfessorsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(data: CreateProfessorDto) {
-    return await this.prisma.professors.create({
+    return await this.prisma.professor.create({
       data: {
         ...data,
       },
@@ -16,11 +16,11 @@ export class ProfessorsService {
   }
 
   async findAll() {
-    return await this.prisma.professors.findMany();
+    return await this.prisma.professor.findMany();
   }
 
   async findProfessor(id: number) {
-    return await this.prisma.professors.findUnique({
+    return await this.prisma.professor.findUnique({
       where: {
         id: id,
       },
@@ -28,7 +28,7 @@ export class ProfessorsService {
   }
 
   async deleteProfessor(id: number) {
-    return await this.prisma.professors.delete({
+    return await this.prisma.professor.delete({
       where: {
         id: id,
       },
@@ -36,7 +36,7 @@ export class ProfessorsService {
   }
 
   async updateProfessor(id: number, data: UpdateProfessorDto) {
-    return await this.prisma.professors.update({
+    return await this.prisma.professor.update({
       where: {
         id: id,
       },

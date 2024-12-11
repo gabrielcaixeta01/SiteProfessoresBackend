@@ -12,7 +12,7 @@ export class CreateAvaliacaoDto {
   text: string;
 
   @IsNumber()
-  userId2: number;
+  userId: number;
 
   @IsNumber()
   nota: number;

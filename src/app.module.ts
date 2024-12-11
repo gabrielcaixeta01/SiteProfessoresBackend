@@ -6,6 +6,8 @@ import { AvaliacaoModule } from './avaliacao/avaliacao.module';
 import { ProfessorsModule } from './professors/professors.module';
 import { CoursesModule } from './courses/courses.module';
 import { ConfigModule } from '@nestjs/config';
+import { ProgramsModule } from './programs/programs.module';
+import { DepartmentsModule } from './departments/departments.module';
 
 @Module({
   imports: [
@@ -16,6 +18,8 @@ import { ConfigModule } from '@nestjs/config';
     AvaliacaoModule,
     ProfessorsModule,
     CoursesModule,
+    ProgramsModule,
+    DepartmentsModule,
   ],
   controllers: [],
   providers: [],

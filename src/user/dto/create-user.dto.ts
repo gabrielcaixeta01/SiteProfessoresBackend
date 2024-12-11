@@ -2,35 +2,44 @@ import {
   IsEmail,
   IsNotEmpty,
   IsOptional,
-  IsNumber,
   IsString,
-  IsStrongPassword,
+  IsInt,
+  MinLength,
+  Matches,
 } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class CreateUserDto {
-  @IsOptional()
-  id?: number;
-
-  @IsNotEmpty({ message: 'Nome is required' })
-  @IsString({ message: 'Nome must be a string' })
+  @IsString()
+  @IsNotEmpty()
   name: string;
 
-  @IsNotEmpty({ message: 'Email is required' })
   @IsEmail()
+  @IsNotEmpty()
   email: string;
 
-  @IsNotEmpty({ message: 'Senha is required' })
-  @IsStrongPassword()
+  @IsString()
+  @MinLength(8, { message: 'A senha deve ter pelo menos 8 caracteres.' })
+  @Matches(/(?=.*[a-z])/, {
+    message: 'A senha deve conter pelo menos uma letra minúscula.',
+  })
+  @Matches(/(?=.*[A-Z])/, {
+    message: 'A senha deve conter pelo menos uma letra maiúscula.',
+  })
+  @Matches(/(?=.*\d)/, { message: 'A senha deve conter pelo menos um número.' })
+  @Matches(/(?=.*[@$!%*?&])/, {
+    message: 'A senha deve conter pelo menos um caractere especial.',
+  })
   password: string;
 
-  @IsNotEmpty({ message: 'Departamento is required' })
-  @IsString({ message: 'Departamento must be a string' })
-  department: string;
-
-  @IsNotEmpty({ message: 'Curso is required' })
-  @IsNumber({}, { message: 'Curso must be a valid course ID' })
-  courseId: number;
+  @IsInt()
+  @IsNotEmpty()
+  departmentId: number;
+  @IsOptional()
+  @IsInt()
+  programId?: number;
 
   @IsOptional()
+  @Transform(({ value }) => (value ? Buffer.from(value, 'base64') : null)) // Converte base64 para Buffer
   profilepic?: Buffer;
 }
