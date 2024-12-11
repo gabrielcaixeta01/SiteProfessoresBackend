@@ -14,9 +14,9 @@ export class UpdateProfessorDto {
   departmentId?: number;
 
   @IsOptional()
-  @IsArray()
+  @IsArray({ message: 'Os IDs dos cursos devem ser um array' })
   @IsInt({ each: true, message: 'Os IDs dos cursos devem ser números' })
-  coursesIds?: number[];
+  courseIds?: number[];
 
   @IsOptional()
   @Transform(({ value }) => (value ? new Date(value) : undefined))

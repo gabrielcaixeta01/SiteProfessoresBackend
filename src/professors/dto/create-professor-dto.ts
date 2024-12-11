@@ -20,7 +20,7 @@ export class CreateProfessorDto {
   @IsOptional()
   @IsArray()
   @IsInt({ each: true, message: 'Os IDs dos cursos devem ser números' })
-  coursesIds?: number[];
+  courseIds?: number[];
 
   @IsOptional()
   @Transform(({ value }) => (value ? new Date(value) : undefined))
