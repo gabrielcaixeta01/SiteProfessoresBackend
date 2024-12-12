@@ -14,6 +14,10 @@ export class UpdateUserDto {
   programId?: number;
 
   @IsOptional()
+  @IsInt()
+  departmentId?: number;
+
+  @IsOptional()
   @IsString()
   profilepic?: string | Buffer;
 }

@@ -33,7 +33,11 @@ export class CreateUserDto {
   password: string;
 
   @IsOptional()
-  @IsInt({ message: 'O ID do programa deve ser um número inteiro.' })
+  @IsInt()
+  departmentId?: number;
+
+  @IsOptional()
+  @IsInt()
   programId?: number;
 
   @IsOptional()
