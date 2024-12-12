@@ -36,19 +36,30 @@ export class CommentService {
   }
 
   async findAll() {
-    return await this.prisma.comment.findMany();
+    return this.prisma.comment.findMany({
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
   }
 
   async findComment(id: number) {
-    const comment = await this.prisma.comment.findUnique({
-      where: {
-        id: id,
+    return this.prisma.comment.findUnique({
+      where: { id },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
       },
     });
-    if (!comment) {
-      throw new NotFoundException('Comentário não encontrado.');
-    }
-    return comment;
   }
 
   async deleteComment(id: number) {
