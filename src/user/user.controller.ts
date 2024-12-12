@@ -39,6 +39,9 @@ export class UserController {
   async findUser(@Param('id', ParseIntPipe) id: number) {
     try {
       const user = await this.userService.findUserById(id);
+      if (!user) {
+        throw new NotFoundException(`Usuário com ID ${id} não encontrado`);
+      }
       return user;
     } catch (error) {
       throw new NotFoundException(`Erro ao buscar o usuário: ${error.message}`);

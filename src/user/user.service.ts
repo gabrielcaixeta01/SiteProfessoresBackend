@@ -27,12 +27,17 @@ export class UserService {
     const user = await this.prisma.user.findUnique({
       where: { id },
       include: {
-        program: true,
+        program: true, // Inclui o programa do usuário
+        Department: true, // Inclui o departamento do usuário (se necessário)
         avaliacoes: {
           include: {
-            professor: true,
-            course: true,
-            comments: true,
+            professor: true, // Inclui o professor relacionado à avaliação
+            course: true, // Inclui o curso relacionado à avaliação
+            comments: {
+              include: {
+                user: true, // Inclui o autor do comentário
+              },
+            },
           },
         },
       },
