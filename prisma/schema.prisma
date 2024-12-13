@@ -12,7 +12,7 @@ model User {
   name         String
   email        String      @unique
   password     String
-  Department   Department? @relation(fields: [departmentId], references: [id])
+  department   Department? @relation(fields: [departmentId], references: [id])
   departmentId Int?
   program      Programs?   @relation(fields: [programId], references: [id])
   programId    Int?

@@ -46,7 +46,7 @@ export class UserService {
         program: data.programId
           ? { connect: { id: data.programId } }
           : undefined,
-        Department: data.departmentId
+        department: data.departmentId
           ? { connect: { id: data.departmentId } }
           : undefined,
         profilepic: data.profilepic ? data.profilepic.toString('base64') : null,
@@ -58,7 +58,7 @@ export class UserService {
     return await this.prisma.user.findMany({
       include: {
         program: true,
-        Department: true,
+        department: true,
       },
     });
   }
@@ -68,7 +68,7 @@ export class UserService {
       where: { id },
       include: {
         program: true,
-        Department: true,
+        department: true,
         avaliacoes: {
           include: {
             professor: true,
