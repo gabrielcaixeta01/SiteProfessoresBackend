@@ -10,6 +10,8 @@ import {
   Delete,
   Patch,
   NotFoundException,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -50,12 +52,37 @@ export class UserController {
 
   @Get('email/:email')
   async findUserByEmail(@Param('email') email: string) {
-    return await this.userService.findUserByEmail(email);
+    try {
+      const user = await this.userService.findUserByEmail(email);
+      if (!user) {
+        throw new NotFoundException(
+          `Usuário com email ${email} não encontrado`,
+        );
+      }
+      return user;
+    } catch (error) {
+      throw new HttpException(
+        `Erro ao buscar o usuário por email: ${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   @Delete(':id')
   async deleteUser(@Param('id', ParseIntPipe) id: number) {
-    return await this.userService.deleteUser(id);
+    try {
+      const user = await this.userService.findUserById(id);
+      if (!user) {
+        throw new NotFoundException(`Usuário com ID ${id} não encontrado`);
+      }
+      await this.userService.deleteUser(id);
+      return { message: `Usuário com ID ${id} excluído com sucesso` };
+    } catch (error) {
+      throw new HttpException(
+        `Erro ao excluir o usuário: ${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   @Patch(':id')
@@ -63,9 +90,23 @@ export class UserController {
     @Param('id', ParseIntPipe) id: number,
     @Body(ValidationPipe) data: UpdateUserDto,
   ) {
-    if (typeof data.profilepic === 'string') {
-      data.profilepic = Buffer.from(data.profilepic, 'base64');
+    try {
+      const user = await this.userService.findUserById(id);
+      if (!user) {
+        throw new NotFoundException(`Usuário com ID ${id} não encontrado`);
+      }
+
+      if (typeof data.profilepic === 'string') {
+        data.profilepic = Buffer.from(data.profilepic, 'base64');
+      }
+
+      const updatedUser = await this.userService.updateUser(id, data);
+      return updatedUser;
+    } catch (error) {
+      throw new HttpException(
+        `Erro ao atualizar o usuário: ${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
-    return await this.userService.updateUser(id, data);
   }
 }

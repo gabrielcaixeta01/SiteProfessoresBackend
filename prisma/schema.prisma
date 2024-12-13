@@ -17,8 +17,8 @@ model User {
   program      Programs?   @relation(fields: [programId], references: [id])
   programId    Int?
   profilepic   String?
-  avaliacoes   Avaliacao[]
-  comments     Comment[]
+  avaliacoes   Avaliacao[] 
+  comments     Comment[]   
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
 }
@@ -30,8 +30,8 @@ model Comment {
   avaliacaoId Int
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  avaliacao   Avaliacao @relation(fields: [avaliacaoId], references: [id])
-  user        User      @relation(fields: [userId], references: [id])
+  avaliacao   Avaliacao @relation(fields: [avaliacaoId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Avaliacao {
@@ -41,12 +41,12 @@ model Avaliacao {
   nota        Int
   date        DateTime  @default(now())
   isEdited    Boolean   @default(false)
-  user        User      @relation(fields: [userId], references: [id])
-  professor   Professor @relation(fields: [professorId], references: [id])
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  professor   Professor @relation(fields: [professorId], references: [id], onDelete: Cascade)
   professorId Int
-  course      Courses   @relation(fields: [courseId], references: [id])
+  course      Courses   @relation(fields: [courseId], references: [id], onDelete: Cascade)
   courseId    Int
-  comments    Comment[]
+  comments    Comment[] // Relacionamento mantido sem `onDelete`
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
@@ -54,7 +54,7 @@ model Avaliacao {
 model Programs {
   id        Int      @id @default(autoincrement())
   name      String   @unique
-  users     User[]
+  users     User[]   @relation() // `onDelete` movido para o lado de `User`
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -63,7 +63,7 @@ model Courses {
   id         Int         @id @default(autoincrement())
   name       String      @unique
   professors Professor[] @relation("ProfessorCourses")
-  avaliacoes Avaliacao[]
+  avaliacoes Avaliacao[] // `onDelete` movido para o lado de `Avaliacao`
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
 }
@@ -71,10 +71,10 @@ model Courses {
 model Professor {
   id           Int         @id @default(autoincrement())
   name         String
-  department   Department  @relation(fields: [departmentId], references: [id])
+  department   Department  @relation(fields: [departmentId], references: [id], onDelete: Cascade)
   departmentId Int
   courses      Courses[]   @relation("ProfessorCourses")
-  avaliacoes   Avaliacao[]
+  avaliacoes   Avaliacao[] // Relacionamento mantido sem `onDelete`
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
 }
@@ -82,8 +82,8 @@ model Professor {
 model Department {
   id         Int         @id @default(autoincrement())
   name       String      @unique
-  professors Professor[]
-  users      User[]
+  professors Professor[] // `onDelete` movido para o lado de `Professor`
+  users      User[]      // `onDelete` movido para o lado de `User`
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
 }
