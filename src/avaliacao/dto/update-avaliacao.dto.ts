@@ -20,15 +20,5 @@ export class UpdateAvaliacaoDto {
   @IsOptional()
   isEdited?: boolean;
 
-  @IsNumber()
-  @IsOptional()
-  professorId?: number;
 
-  @IsNumber()
-  @IsOptional()
-  courseId?: number;
-
-  @IsNumber()
-  @IsOptional()
-  userId2?: number;
 }
