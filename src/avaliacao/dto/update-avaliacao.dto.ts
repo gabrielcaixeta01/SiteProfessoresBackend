@@ -12,9 +12,6 @@ export class UpdateAvaliacaoDto {
   @IsNotEmpty()
   text?: string;
 
-  @IsNumber()
-  @IsOptional()
-  nota?: number;
 
   @IsBoolean()
   @IsOptional()
