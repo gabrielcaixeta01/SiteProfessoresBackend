@@ -17,8 +17,8 @@ model User {
   program      Programs?   @relation(fields: [programId], references: [id])
   programId    Int?
   profilepic   String?
-  avaliacoes   Avaliacao[] 
-  comments     Comment[]   
+  avaliacoes   Avaliacao[]
+  comments     Comment[]
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
 }
@@ -82,8 +82,8 @@ model Professor {
 model Department {
   id         Int         @id @default(autoincrement())
   name       String      @unique
-  professors Professor[] // `onDelete` movido para o lado de `Professor`
-  users      User[]      // `onDelete` movido para o lado de `User`
+  professors Professor[] @relation() // `onDelete` movido para o lado de `Professor`
+  users      User[]      @relation() // `onDelete` movido para o lado de `User`
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
 }
