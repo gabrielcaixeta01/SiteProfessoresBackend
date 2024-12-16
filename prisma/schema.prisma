@@ -38,7 +38,6 @@ model Avaliacao {
   id          Int       @id @default(autoincrement())
   text        String
   userId      Int
-  date        DateTime  @default(now())
   isEdited    Boolean   @default(false)
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   professor   Professor @relation(fields: [professorId], references: [id], onDelete: Cascade)
