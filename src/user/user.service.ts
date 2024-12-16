@@ -6,6 +6,8 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
+import * as bcrypt from 'bcrypt';
+
 
 @Injectable()
 export class UserService {
@@ -38,11 +40,13 @@ export class UserService {
       }
     }
 
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+
     return await this.prisma.user.create({
       data: {
         email: data.email,
         name: data.name,
-        password: data.password,
+        password: hashedPassword,
         program: data.programId
           ? { connect: { id: data.programId } }
           : undefined,
@@ -59,6 +63,17 @@ export class UserService {
       include: {
         program: true,
         department: true,
+        avaliacoes: {
+          include: {
+            professor: true,
+            course: true,
+            comments: {
+              include: {
+                user: true,
+              },
+            },
+          },
+        },
       },
     });
   }
@@ -114,6 +129,7 @@ export class UserService {
 
     return await this.prisma.user.delete({
       where: { id },
+      
     });
   }
 
@@ -153,9 +169,10 @@ export class UserService {
       }
     }
 
+    const hashedPassword = await bcrypt.hash(data.password, 10);
     const updateData: any = {
       name: data.name,
-      password: data.password,
+      password: hashedPassword,
       programId: data.programId ? Number(data.programId) : undefined,
       departmentId: data.departmentId ? Number(data.departmentId) : undefined,
       profilepic: data.profilepic
@@ -168,6 +185,21 @@ export class UserService {
     return await this.prisma.user.update({
       where: { id },
       data: updateData,
+      include: {
+        program: true,
+        department: true,
+        avaliacoes: {
+          include: {
+            professor: true,
+            course: true,
+            comments: {
+              include: {
+                user: true,
+              },
+            },
+          },
+        },
+      },
     });
   }
 }
