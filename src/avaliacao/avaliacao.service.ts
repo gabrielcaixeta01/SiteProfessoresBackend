@@ -8,39 +8,14 @@ export class AvaliacaoService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(data: CreateAvaliacaoDto) {
-    // Verifica se o usuário existe
-    const userExists = await this.prisma.user.findUnique({
-      where: { id: data.userId },
-    });
-    if (!userExists) {
-      throw new NotFoundException('Usuário não encontrado');
-    }
-
-    // Verifica se o professor existe
-    const professorExists = await this.prisma.professor.findUnique({
-      where: { id: data.professorId },
-    });
-    if (!professorExists) {
-      throw new NotFoundException('Professor não encontrado');
-    }
-
-    // Verifica se o curso existe
-    const courseExists = await this.prisma.courses.findUnique({
-      where: { id: data.courseId },
-    });
-    if (!courseExists) {
-      throw new NotFoundException('Curso não encontrado');
-    }
-
-    // Cria a avaliação após as validações
+    console.log('Dados recebidos no Service:', data);
     return this.prisma.avaliacao.create({
       data: {
         text: data.text,
         userId: data.userId,
-        date: data.date,
-        isEdited: data.isEdited || false,
         professorId: data.professorId,
         courseId: data.courseId,
+        isEdited: false,
       },
     });
   }

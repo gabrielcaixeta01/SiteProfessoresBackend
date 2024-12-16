@@ -1,11 +1,4 @@
-import {
-  IsBoolean,
-  IsDate,
-  IsNumber,
-  IsOptional,
-  IsString,
-} from 'class-validator';
-import { Transform } from 'class-transformer';
+import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateAvaliacaoDto {
   @IsString()
@@ -15,13 +8,8 @@ export class CreateAvaliacaoDto {
   userId: number;
 
   @IsOptional()
-  @Transform(({ value }) => (value ? new Date(value) : undefined))
-  @IsDate()
-  date?: Date;
-
-  @IsOptional()
   @IsBoolean()
-  isEdited: boolean;
+  isEdited?: boolean;
 
   @IsNumber()
   professorId: number;

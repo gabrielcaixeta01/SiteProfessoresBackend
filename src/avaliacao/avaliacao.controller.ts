@@ -19,6 +19,7 @@ export class AvaliacaoController {
 
   @Post()
   async create(@Body(ValidationPipe) avaliacaoData: CreateAvaliacaoDto) {
+    console.log('Dados recebidos no Controller:', avaliacaoData);
     return this.avaliacaoService.create(avaliacaoData);
   }
 
