@@ -91,16 +91,14 @@ export class UserController {
     @Body(ValidationPipe) data: UpdateUserDto,
   ) {
     try {
-      const user = await this.userService.findUserById(id);
-      if (!user) {
-        throw new NotFoundException(`Usuário com ID ${id} não encontrado`);
-      }
-
+      // Se profilepic for string base64, converte
       if (typeof data.profilepic === 'string') {
         data.profilepic = Buffer.from(data.profilepic, 'base64');
       }
 
+      // Atualiza o usuário diretamente no serviço
       const updatedUser = await this.userService.updateUser(id, data);
+
       return updatedUser;
     } catch (error) {
       throw new HttpException(

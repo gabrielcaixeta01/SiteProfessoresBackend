@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-  BadRequestException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -12,36 +8,11 @@ import * as bcrypt from 'bcrypt';
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
+  // Criação de Usuário
   async create(data: CreateUserDto) {
-    // Verificar se o programa existe
-    if (data.programId) {
-      const programExists = await this.prisma.programs.findUnique({
-        where: { id: data.programId },
-      });
-
-      if (!programExists) {
-        throw new BadRequestException(
-          `Programa com ID ${data.programId} não encontrado`,
-        );
-      }
-    }
-
-    // Verificar se o departamento existe
-    if (data.departmentId) {
-      const departmentExists = await this.prisma.department.findUnique({
-        where: { id: data.departmentId },
-      });
-
-      if (!departmentExists) {
-        throw new BadRequestException(
-          `Departamento com ID ${data.departmentId} não encontrado`,
-        );
-      }
-    }
-
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
-    return await this.prisma.user.create({
+    return this.prisma.user.create({
       data: {
         email: data.email,
         name: data.name,
@@ -57,8 +28,9 @@ export class UserService {
     });
   }
 
+  // Buscar todos os usuários
   async findAll() {
-    return await this.prisma.user.findMany({
+    return this.prisma.user.findMany({
       include: {
         program: true,
         department: true,
@@ -66,17 +38,14 @@ export class UserService {
           include: {
             professor: true,
             course: true,
-            comments: {
-              include: {
-                user: true,
-              },
-            },
+            comments: { include: { user: true } },
           },
         },
       },
     });
   }
 
+  // Buscar usuário por ID
   async findUserById(id: number) {
     const user = await this.prisma.user.findUnique({
       where: { id },
@@ -87,11 +56,7 @@ export class UserService {
           include: {
             professor: true,
             course: true,
-            comments: {
-              include: {
-                user: true,
-              },
-            },
+            comments: { include: { user: true } },
           },
         },
       },
@@ -116,8 +81,8 @@ export class UserService {
     return user;
   }
 
+  // Deletar usuário
   async deleteUser(id: number) {
-    // Verificar se o usuário existe antes de tentar excluir
     const userExists = await this.prisma.user.findUnique({
       where: { id },
     });
@@ -126,13 +91,13 @@ export class UserService {
       throw new NotFoundException(`Usuário com ID ${id} não encontrado`);
     }
 
-    return await this.prisma.user.delete({
+    return this.prisma.user.delete({
       where: { id },
     });
   }
 
+  // Atualizar usuário
   async updateUser(id: number, data: UpdateUserDto) {
-    // Verificar se o usuário existe antes de atualizar
     const userExists = await this.prisma.user.findUnique({
       where: { id },
     });
@@ -141,38 +106,13 @@ export class UserService {
       throw new NotFoundException(`Usuário com ID ${id} não encontrado`);
     }
 
-    // Validar programId, se fornecido
-    if (data.programId) {
-      const programExists = await this.prisma.programs.findUnique({
-        where: { id: data.programId },
-      });
-
-      if (!programExists) {
-        throw new BadRequestException(
-          `Programa com ID ${data.programId} não encontrado`,
-        );
-      }
-    }
-
-    // Validar departmentId, se fornecido
-    if (data.departmentId) {
-      const departmentExists = await this.prisma.department.findUnique({
-        where: { id: data.departmentId },
-      });
-
-      if (!departmentExists) {
-        throw new BadRequestException(
-          `Departamento com ID ${data.departmentId} não encontrado`,
-        );
-      }
-    }
-
-    const hashedPassword = await bcrypt.hash(data.password, 10);
     const updateData: any = {
       name: data.name,
-      password: hashedPassword,
-      programId: data.programId ? Number(data.programId) : undefined,
-      departmentId: data.departmentId ? Number(data.departmentId) : undefined,
+      password: data.password
+        ? await bcrypt.hash(data.password, 10)
+        : undefined,
+      programId: data.programId || undefined,
+      departmentId: data.departmentId || undefined,
       profilepic: data.profilepic
         ? typeof data.profilepic === 'string'
           ? data.profilepic
@@ -180,7 +120,7 @@ export class UserService {
         : undefined,
     };
 
-    return await this.prisma.user.update({
+    return this.prisma.user.update({
       where: { id },
       data: updateData,
       include: {
@@ -190,11 +130,7 @@ export class UserService {
           include: {
             professor: true,
             course: true,
-            comments: {
-              include: {
-                user: true,
-              },
-            },
+            comments: { include: { user: true } },
           },
         },
       },
