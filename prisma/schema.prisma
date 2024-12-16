@@ -46,7 +46,7 @@ model Avaliacao {
   professorId Int
   course      Courses   @relation(fields: [courseId], references: [id], onDelete: Cascade)
   courseId    Int
-  comments    Comment[] // Relacionamento mantido sem `onDelete`
+  comments    Comment[] 
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
@@ -54,7 +54,7 @@ model Avaliacao {
 model Programs {
   id        Int      @id @default(autoincrement())
   name      String   @unique
-  users     User[]   @relation() // `onDelete` movido para o lado de `User`
+  users     User[]   @relation()
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -63,7 +63,7 @@ model Courses {
   id         Int         @id @default(autoincrement())
   name       String      @unique
   professors Professor[] @relation("ProfessorCourses")
-  avaliacoes Avaliacao[] // `onDelete` movido para o lado de `Avaliacao`
+  avaliacoes Avaliacao[]
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
 }
@@ -74,7 +74,7 @@ model Professor {
   department   Department  @relation(fields: [departmentId], references: [id], onDelete: Cascade)
   departmentId Int
   courses      Courses[]   @relation("ProfessorCourses")
-  avaliacoes   Avaliacao[] // Relacionamento mantido sem `onDelete`
+  avaliacoes   Avaliacao[] 
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
 }

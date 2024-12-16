@@ -32,15 +32,30 @@ export class ProfessorsService {
     });
   }
 
-  // Retorna um professor específico
   async findProfessor(id: number) {
     const professor = await this.prisma.professor.findUnique({
-      where: {
-        id,
-      },
+      where: { id },
       include: {
-        department: true,
-        courses: true,
+        department: {
+          select: { id: true, name: true },
+        },
+        courses: {
+          select: { id: true, name: true },
+        },
+        avaliacoes: {
+          include: {
+            user: {
+              select: { id: true, name: true }, // Autor da avaliação
+            },
+            comments: {
+              include: {
+                user: {
+                  select: { id: true, name: true }, // Autor dos comentários
+                },
+              },
+            },
+          },
+        },
       },
     });
 
@@ -51,7 +66,6 @@ export class ProfessorsService {
     return professor;
   }
 
-  // Exclui um professor
   async deleteProfessor(id: number) {
     const professor = await this.prisma.professor.findUnique({ where: { id } });
 

@@ -11,6 +11,7 @@ import {
   ParseIntPipe,
   Delete,
   Patch,
+  NotFoundException,
 } from '@nestjs/common';
 
 @Controller('professors')
@@ -32,7 +33,11 @@ export class ProfessorsController {
   // Retorna um professor específico pelo ID
   @Get(':id')
   async findProfessor(@Param('id', ParseIntPipe) id: number) {
-    return this.professorsService.findProfessor(id);
+    const professor = await this.professorsService.findProfessor(id);
+    if (!professor) {
+      throw new NotFoundException(`Professor com ID ${id} não encontrado.`);
+    }
+    return professor;
   }
 
   // Exclui um professor pelo ID
