@@ -51,6 +51,21 @@ export class AvaliacaoService {
     return avaliacao;
   }
 
+  async findAvaliacaoByProfessor(professorId: number) {
+    return this.prisma.avaliacao.findMany({
+      where: { professorId },
+      include: {
+        user: true,
+        course: true,
+        comments: {
+          include: {
+            user: true,
+          },
+        },
+      },
+    });
+  }
+
   async deleteAvaliacao(id: number) {
     const avaliacaoExists = await this.prisma.avaliacao.findUnique({
       where: { id },

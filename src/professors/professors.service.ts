@@ -45,12 +45,15 @@ export class ProfessorsService {
         avaliacoes: {
           include: {
             user: {
-              select: { id: true, name: true }, // Autor da avaliação
+              select: { id: true, name: true, profilepic: true }, // Autor da avaliação
+            },
+            course: {
+              select: { id: true, name: true }, // Inclui o curso associado à avaliação
             },
             comments: {
               include: {
                 user: {
-                  select: { id: true, name: true }, // Autor dos comentários
+                  select: { id: true, name: true, profilepic: true }, // Autor dos comentários
                 },
               },
             },
