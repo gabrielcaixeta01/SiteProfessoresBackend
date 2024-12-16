@@ -14,9 +14,6 @@ export class CreateAvaliacaoDto {
   @IsNumber()
   userId: number;
 
-  @IsNumber()
-  nota: number;
-
   @IsOptional()
   @Transform(({ value }) => (value ? new Date(value) : undefined))
   @IsDate()

@@ -37,7 +37,6 @@ export class AvaliacaoService {
       data: {
         text: data.text,
         userId: data.userId,
-        nota: data.nota,
         date: data.date,
         isEdited: data.isEdited || false,
         professorId: data.professorId,
