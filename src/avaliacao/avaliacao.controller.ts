@@ -12,6 +12,7 @@ import {
 import { AvaliacaoService } from './avaliacao.service';
 import { CreateAvaliacaoDto } from './dto/create-avaliacao.dto';
 import { UpdateAvaliacaoDto } from './dto/update-avaliacao.dto';
+import { Public } from 'src/auth/decorators/isPublic.decorator';
 
 @Controller('avaliacao')
 export class AvaliacaoController {
@@ -23,11 +24,13 @@ export class AvaliacaoController {
     return this.avaliacaoService.create(avaliacaoData);
   }
 
+  @Public()
   @Get()
   async findAll() {
     return this.avaliacaoService.findAll();
   }
 
+  @Public()
   @Get(':id')
   async findAvaliacao(@Param('id', ParseIntPipe) id: number) {
     return this.avaliacaoService.findAvaliacao(id);

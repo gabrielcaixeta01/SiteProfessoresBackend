@@ -12,11 +12,13 @@ import {
 import { CoursesService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course-dto';
 import { UpdateCourseDto } from './dto/update-course-dto';
+import { Public } from 'src/auth/decorators/isPublic.decorator';
 
 @Controller('courses')
 export class CoursesController {
   constructor(private readonly coursesService: CoursesService) {}
 
+  @Public()
   @Post()
   async create(
     @Body(ValidationPipe) coursesData: CreateCourseDto | CreateCourseDto[],
@@ -27,21 +29,25 @@ export class CoursesController {
     return await this.coursesService.create(coursesData);
   }
 
+  @Public()
   @Get()
   async findAll() {
     return await this.coursesService.findAll();
   }
 
+  @Public()
   @Get(':id')
   async findCourse(@Param('id', ParseIntPipe) id: number) {
     return await this.coursesService.findCourse(id);
   }
 
+  @Public()
   @Delete(':id')
   async deleteCourse(@Param('id', ParseIntPipe) id: number) {
     return await this.coursesService.deleteCourse(id);
   }
 
+  @Public()
   @Patch(':id')
   async updateCourse(
     @Param('id', ParseIntPipe) id: number,

@@ -16,6 +16,7 @@ import {
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Public } from 'src/auth/decorators/isPublic.decorator';
 
 @Controller('user')
 export class UserController {
@@ -24,6 +25,7 @@ export class UserController {
     private readonly prisma: PrismaService,
   ) {}
 
+  @Public()
   @Post()
   async create(@Body(ValidationPipe) userData: CreateUserDto) {
     if (typeof userData.profilepic === 'string') {
@@ -32,11 +34,13 @@ export class UserController {
     return await this.userService.create(userData);
   }
 
+  @Public()
   @Get()
   async findAll() {
     return await this.userService.findAll();
   }
 
+  @Public()
   @Get(':id')
   async findUser(@Param('id', ParseIntPipe) id: number) {
     try {
@@ -50,6 +54,7 @@ export class UserController {
     }
   }
 
+  @Public()
   @Get('email/:email')
   async findUserByEmail(@Param('email') email: string) {
     try {

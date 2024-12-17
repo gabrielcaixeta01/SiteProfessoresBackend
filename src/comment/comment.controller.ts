@@ -13,6 +13,7 @@ import {
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
+import { Public } from 'src/auth/decorators/isPublic.decorator';
 
 @Controller('comment')
 export class CommentController {
@@ -23,11 +24,13 @@ export class CommentController {
     return await this.commentService.create(commentData);
   }
 
+  @Public()
   @Get()
   async findAll() {
     return await this.commentService.findAll();
   }
 
+  @Public()
   @Get(':id')
   async findComment(@Param('id', ParseIntPipe) id: number) {
     const comment = await this.commentService.findComment(id);
