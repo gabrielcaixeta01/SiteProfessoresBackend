@@ -12,11 +12,14 @@ import {
   NotFoundException,
   HttpException,
   HttpStatus,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Public } from 'src/auth/decorators/isPublic.decorator';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { UserPayload } from 'src/auth/types/UserPayload';
 
 @Controller('user')
 export class UserController {
@@ -74,11 +77,14 @@ export class UserController {
   }
 
   @Delete(':id')
-  async deleteUser(@Param('id', ParseIntPipe) id: number) {
+  async deleteUser(@Param('id', ParseIntPipe) id: number,  @CurrentUser() currentUser: UserPayload) {
     try {
       const user = await this.userService.findUserById(id);
       if (!user) {
         throw new NotFoundException(`Usuário com ID ${id} não encontrado`);
+      }
+      if (id !== currentUser.sub) {
+        throw new UnauthorizedException('Você só pode deletar suas própria conta.');
       }
       await this.userService.deleteUser(id);
       return { message: `Usuário com ID ${id} excluído com sucesso` };
@@ -94,9 +100,13 @@ export class UserController {
   async updateUser(
     @Param('id', ParseIntPipe) id: number,
     @Body(ValidationPipe) data: UpdateUserDto,
+    @CurrentUser() currentUser: UserPayload
   ) {
     try {
       // Se profilepic for string base64, converte
+      if (id !== currentUser.sub) {
+        throw new UnauthorizedException('Você só pode editar suas própria conta.');
+      }
       if (typeof data.profilepic === 'string') {
         data.profilepic = Buffer.from(data.profilepic, 'base64');
       }
