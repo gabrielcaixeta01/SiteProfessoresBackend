@@ -8,10 +8,11 @@ import { CoursesModule } from './courses/courses.module';
 import { ConfigModule } from '@nestjs/config';
 import { ProgramsModule } from './programs/programs.module';
 import { DepartmentsModule } from './departments/departments.module';
+import { JwtModule } from '@nestjs/jwt';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
     UserModule,
     PrismaModule,
     CommentModule,
@@ -20,7 +21,11 @@ import { DepartmentsModule } from './departments/departments.module';
     CoursesModule,
     ProgramsModule,
     DepartmentsModule,
-  ],
+    JwtModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    AuthModule,],
   controllers: [],
   providers: [],
 })
