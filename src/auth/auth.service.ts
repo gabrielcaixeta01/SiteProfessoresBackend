@@ -37,7 +37,7 @@ export class AuthService {
         if (isPasswordValid) {
           return { 
             ...user,
-            senha: undefined,};
+            password: undefined,};
         }
       }
       return null;

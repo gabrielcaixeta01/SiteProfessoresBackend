@@ -12,11 +12,13 @@ import {
 import { DepartmentsService } from './departments.service';
 import { CreateDepartmentDto } from './dto/create-department.dto';
 import { UpdateDepartmentDto } from './dto/update-department.dto';
+import { Public } from 'src/auth/decorators/isPublic.decorator';
 
 @Controller('departments')
 export class DepartmentsController {
   constructor(private readonly departmentsService: DepartmentsService) {}
 
+  @Public()
   @Post()
   async create(
     @Body(ValidationPipe)
@@ -28,16 +30,19 @@ export class DepartmentsController {
     return await this.departmentsService.create(departmentsData);
   }
 
+  @Public()
   @Get()
   async findAll() {
     return this.departmentsService.findAll();
   }
 
+  @Public()
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
     return this.departmentsService.findOne(id);
   }
 
+  @Public()
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
@@ -46,6 +51,7 @@ export class DepartmentsController {
     return this.departmentsService.update(id, updateDepartmentDto);
   }
 
+  @Public()
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number) {
     return this.departmentsService.remove(id);
