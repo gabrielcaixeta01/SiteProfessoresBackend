@@ -1,4 +1,4 @@
-import { Controller, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { UserModule } from './user/user.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { CommentModule } from './comment/comment.module';
@@ -27,8 +27,9 @@ import { APP_GUARD } from '@nestjs/core';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    AuthModule,],
-   providers: [
+    AuthModule,
+  ],
+  providers: [
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
